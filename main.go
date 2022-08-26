@@ -19,6 +19,10 @@ func main() {
 		log.Fatal("failed to get current ip address", err)
 	}
 
+	if !isIpValid(ip) {
+		log.Fatal("invalid ip address", ip)
+	}
+
 	cf := newClient(token)
 
 	var zoneId string

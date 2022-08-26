@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"net"
 	"net/http"
 )
 
@@ -20,4 +21,8 @@ func getCurrentIP() (string, error) {
 		return "", err
 	}
 	return string(b), nil
+}
+
+func isIpValid(ip string) bool {
+	return net.ParseIP(ip) != nil
 }

@@ -48,6 +48,7 @@ func main() {
 	}
 
 	if records.Result[0].Content == ip {
+		log.Println("ip address has not changed", ip)
 		return
 	}
 

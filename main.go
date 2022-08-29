@@ -14,6 +14,8 @@ var (
 
 func main() {
 
+	log.Println("Starting for zone:", zone, "subdomain:", subdomain, "type:", recordType)
+
 	ip, err := getCurrentIP()
 	if err != nil {
 		log.Fatal("failed to get current ip address", err)

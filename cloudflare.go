@@ -82,5 +82,10 @@ func (c *cfClient) request(req *http.Request, v interface{}) error {
 		return err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode >= 300 {
+		return fmt.Errorf("request failed with status code: %d", res.StatusCode)
+	}
+
 	return json.NewDecoder(res.Body).Decode(v)
 }

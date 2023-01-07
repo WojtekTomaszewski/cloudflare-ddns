@@ -18,7 +18,7 @@ func main() {
 
 	ip, err := getCurrentIP()
 	if err != nil {
-		log.Fatal("failed to get current ip address", err)
+		log.Fatal("failed to get current ip address, ", err)
 	}
 
 	if !isIpValid(ip) {
@@ -30,7 +30,7 @@ func main() {
 	var zoneId string
 	zones, err := cf.getZones()
 	if err != nil {
-		log.Fatal("failed to get zones", err)
+		log.Fatal("failed to get zones, ", err)
 	}
 	for _, z := range zones.Result {
 		if z.Name == zone {
@@ -46,7 +46,7 @@ func main() {
 
 	records, err := cf.getDnsRecord(zoneId, recordType, recordName)
 	if err != nil {
-		log.Fatal("failed to get dns records", err)
+		log.Fatal("failed to get dns records, ", err)
 	}
 
 	if len(records.Result) == 0 {
@@ -54,7 +54,7 @@ func main() {
 	}
 
 	if records.Result[0].Content == ip {
-		log.Println("ip address has not changed", ip)
+		log.Println("ip address has not changed: ", ip)
 		return
 	}
 

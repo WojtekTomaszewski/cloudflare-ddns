@@ -1,4 +1,4 @@
-package main
+package cloudflare
 
 import (
 	"bytes"
@@ -8,16 +8,19 @@ import (
 	"time"
 )
 
+// Cloudflare API zones endpoint
 const (
 	cloudflareURL string = "https://api.cloudflare.com/client/v4/zones"
 )
 
+// cfClient is representation of Cloudflare API client
 type cfClient struct {
 	client *http.Client
 	token  string
 }
 
-func newClient(token string) *cfClient {
+// NewClient is cfClient constructor
+func NewClient(token string) *cfClient {
 	return &cfClient{
 		client: &http.Client{
 			Timeout: 10 * time.Second,
@@ -26,7 +29,8 @@ func newClient(token string) *cfClient {
 	}
 }
 
-func (c *cfClient) getZones() (*Zones, error) {
+// GetZones gets all zones DNS zones defined in the account
+func (c *cfClient) GetZones() (*Zones, error) {
 	req, err := http.NewRequest(http.MethodGet, cloudflareURL, nil)
 	if err != nil {
 		return nil, err
@@ -39,7 +43,11 @@ func (c *cfClient) getZones() (*Zones, error) {
 	return zones, nil
 }
 
-func (c *cfClient) getDnsRecord(id, t, name string) (*Records, error) {
+// GetDnsRecord gets specific DNS record from the zone
+// id is the zone id to retriev record from
+// t is record type
+// name is record name, usually domain/subdomain name for which you want to change record
+func (c *cfClient) GetDnsRecord(id, t, name string) (*Records, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/dns_records?type=%s&name=%s", cloudflareURL, id, t, name), nil)
 	if err != nil {
 		return nil, err
@@ -52,7 +60,11 @@ func (c *cfClient) getDnsRecord(id, t, name string) (*Records, error) {
 	return records, nil
 }
 
-func (c *cfClient) updateDnsRecord(zoneId, recordId string, record *Record) error {
+// UpdateDnsRecord update specific record
+// zoneId is zone id where record is defined
+// recordId is id of record to change
+// record is payload with changes to make
+func (c *cfClient) UpdateDnsRecord(zoneId, recordId string, record *Record) error {
 	bytesReocrd, err := json.Marshal(record)
 	if err != nil {
 		return err
@@ -73,6 +85,9 @@ func (c *cfClient) updateDnsRecord(zoneId, recordId string, record *Record) erro
 	return nil
 }
 
+// request does actual API call for provided req, adds rquired haeders
+// res is instance of http.Request
+// v represents response object for body unmarshal
 func (c *cfClient) request(req *http.Request, v interface{}) error {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))

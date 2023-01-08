@@ -1,4 +1,4 @@
-package main
+package publicip
 
 import (
 	"io/ioutil"
@@ -6,11 +6,13 @@ import (
 	"net/http"
 )
 
+// Calling this service to get public ip
 const (
 	ipURL string = "http://ifconfig.me"
 )
 
-func getCurrentIP() (string, error) {
+// GetCurrentIP calls ipURL for current public ip value
+func GetCurrentIP() (string, error) {
 	res, err := http.Get(ipURL)
 	if err != nil {
 		return "", err
@@ -23,6 +25,7 @@ func getCurrentIP() (string, error) {
 	return string(b), nil
 }
 
-func isIpValid(ip string) bool {
+// IsIpValid does simple validation of IP address
+func IsIpValid(ip string) bool {
 	return net.ParseIP(ip) != nil
 }

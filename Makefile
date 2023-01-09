@@ -4,8 +4,8 @@ GOARCH := amd64
 
 build: clean
 	@echo "Build executable file"
-	mkdir bin
-	GOOS=${GOOS} GOARCH=${GOARCH} go build -o bin/${BINARY_NAME} cmd/cloudflare-ddns/main.go
+	@mkdir -p bin
+	@GOOS=${GOOS} GOARCH=${GOARCH} go build -o bin/${BINARY_NAME} cmd/cloudflare-ddns/main.go
 	
 run:
 	@echo Run app
@@ -13,5 +13,5 @@ run:
 
 clean:
 	@echo Cleanup
-	go clean
-	rm -rf bin
+	@go clean
+	@rm -f bin/${BINARY_NAME}

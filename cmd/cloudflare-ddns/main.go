@@ -40,20 +40,20 @@ func main() {
 	}
 	log.Println("detected ip: ", ip)
 
-	if !iptools.IsIpValid(ip) {
+	if !iptools.IsIPValid(ip) {
 		log.Fatal("could not validat current public ip address", ip)
 	}
 
 	cf := cloudflare.NewClient(viper.Get("token").(string))
 
-	var zoneId string
+	var zoneID string
 	zones, err := cf.GetZones()
 	if err != nil {
 		log.Fatal("failed to get zones, ", err)
 	}
 	for _, z := range zones.Result {
 		if z.Name == viper.Get("zone").(string) {
-			zoneId = z.ID
+			zoneID = z.ID
 			break
 		}
 	}
@@ -63,7 +63,7 @@ func main() {
 		recordName = viper.Get("subdomain").(string)
 	}
 
-	records, err := cf.GetDnsRecord(zoneId, viper.Get("type").(string), recordName)
+	records, err := cf.GetDNSRecord(zoneID, viper.Get("type").(string), recordName)
 	if err != nil {
 		log.Fatal("failed to get dns records, ", err)
 	}
@@ -85,7 +85,7 @@ func main() {
 		Content: ip,
 	}
 
-	if err := cf.UpdateDnsRecord(zoneId, records.Result[0].ID, updatedRecord); err != nil {
+	if err := cf.UpdateDNSRecord(zoneID, records.Result[0].ID, updatedRecord); err != nil {
 		log.Fatal("failed to update dns record", err)
 	}
 

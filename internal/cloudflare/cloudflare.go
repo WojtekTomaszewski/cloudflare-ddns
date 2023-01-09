@@ -47,7 +47,7 @@ func (c *CFClient) GetZones() (*Zones, error) {
 // id is the zone id to retriev record from
 // t is record type
 // name is record name, usually domain/subdomain name for which you want to change record
-func (c *CFClient) GetDnsRecord(id, t, name string) (*Records, error) {
+func (c *CFClient) GetDNSRecord(id, t, name string) (*Records, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s/dns_records?type=%s&name=%s", cloudflareURL, id, t, name), nil)
 	if err != nil {
 		return nil, err
@@ -64,12 +64,12 @@ func (c *CFClient) GetDnsRecord(id, t, name string) (*Records, error) {
 // zoneId is zone id where record is defined
 // recordId is id of record to change
 // record is payload with changes to make
-func (c *CFClient) UpdateDnsRecord(zoneId, recordId string, record *Record) error {
+func (c *CFClient) UpdateDNSRecord(zoneID, recordID string, record *Record) error {
 	bytesReocrd, err := json.Marshal(record)
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/%s/dns_records/%s", cloudflareURL, zoneId, recordId), bytes.NewReader(bytesReocrd))
+	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/%s/dns_records/%s", cloudflareURL, zoneID, recordID), bytes.NewReader(bytesReocrd))
 	if err != nil {
 		return err
 	}

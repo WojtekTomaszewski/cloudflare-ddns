@@ -23,7 +23,7 @@ type Record struct {
 	Proxied  bool   `json:"proxied,omitempty"`
 }
 
-// Record is a list of Cloudflare records
+// Records is a list of Cloudflare records
 type Records struct {
 	Result []Record `json:"result"`
 }

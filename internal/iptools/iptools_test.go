@@ -57,7 +57,7 @@ func TestIsIpValid(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		out := iptools.IsIpValid(tc.in)
+		out := iptools.IsIPValid(tc.in)
 		if out != tc.out {
 			t.Fatalf("expected %t, got %t", tc.out, out)
 		}

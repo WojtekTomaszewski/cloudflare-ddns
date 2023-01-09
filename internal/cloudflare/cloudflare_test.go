@@ -99,7 +99,7 @@ func TestGetDnsRecordOK(t *testing.T) {
 		httpmock.NewJsonResponderOrPanic(200, expectedResponse),
 	)
 
-	gotResponse, err := cf_client.GetDnsRecord(test_zone_id, test_type, test_name)
+	gotResponse, err := cf_client.GetDNSRecord(test_zone_id, test_type, test_name)
 
 	assert.Equal(t, expectedResponse, gotResponse, "response is not correct")
 	assert.Nil(t, err, "error is no expected")
@@ -122,7 +122,7 @@ func TestGetDnsRecordNotOK(t *testing.T) {
 		httpmock.NewJsonResponderOrPanic(403, ""),
 	)
 
-	gotResponse, err := cf_client.GetDnsRecord(test_zone_id, test_type, test_name)
+	gotResponse, err := cf_client.GetDNSRecord(test_zone_id, test_type, test_name)
 
 	assert.Equal(t, expected_error, err.Error(), "response is not correct")
 	assert.Nil(t, gotResponse, "response is no expected")
@@ -151,7 +151,7 @@ func TestUpdateDnsRecordOK(t *testing.T) {
 		httpmock.NewJsonResponderOrPanic(200, test_record),
 	)
 
-	err := cf_client.UpdateDnsRecord(test_zone_id, test_record_id, test_record)
+	err := cf_client.UpdateDNSRecord(test_zone_id, test_record_id, test_record)
 
 	assert.Nil(t, err, "no error expected")
 
@@ -172,7 +172,7 @@ func TestUpdateDnsRecordNotOK(t *testing.T) {
 		httpmock.NewJsonResponderOrPanic(400, ""),
 	)
 
-	err := cf_client.UpdateDnsRecord(test_zone_id, test_record_id, test_record)
+	err := cf_client.UpdateDNSRecord(test_zone_id, test_record_id, test_record)
 
 	assert.NotNil(t, err, "error is expected")
 

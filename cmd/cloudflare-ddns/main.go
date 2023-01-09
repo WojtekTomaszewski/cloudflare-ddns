@@ -29,10 +29,10 @@ func init() {
 	viper.SetDefault("subdomain", "")
 	viper.SetDefault("type", "A")
 	viper.SetEnvPrefix("cloudflare")
+	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal("failed to read config", err)
 	}
-	viper.AutomaticEnv()
 
 }
 

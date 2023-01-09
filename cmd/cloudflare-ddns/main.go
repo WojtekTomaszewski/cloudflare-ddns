@@ -6,37 +6,39 @@ import (
 
 	"github.com/WojtekTomaszewski/cloudflare-ddns/internal/cloudflare"
 	publicip "github.com/WojtekTomaszewski/cloudflare-ddns/internal/public-ip"
+	"github.com/spf13/viper"
 )
 
-var (
-	token      = os.Getenv("CLOUDFLARE_TOKEN")
-	zone       = os.Getenv("CLOUDFLARE_ZONE")
-	subdomain  = os.Getenv("CLOUDFLARE_SUBDOMAIN")
-	recordType = os.Getenv("CLOUDFLARE_RECORD_TYPE")
-)
+// var (
+// 	token      = os.Getenv("CLOUDFLARE_TOKEN")
+// 	zone       = os.Getenv("CLOUDFLARE_ZONE")
+// 	subdomain  = os.Getenv("CLOUDFLARE_SUBDOMAIN")
+// 	recordType = os.Getenv("CLOUDFLARE_RECORD_TYPE")
+// )
+
+func init() {
+
+	cwd, _ := os.Getwd()
+
+	log.Println("cwd: ", cwd)
+
+	viper.SetConfigName("config.cfg")
+	viper.SetConfigType("env")
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("$HOME/.config/cloudflare-ddns")
+	viper.SetDefault("subdomain", "")
+	viper.SetDefault("type", "A")
+	viper.SetEnvPrefix("cloudflare")
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatal("failed to read config", err)
+	}
+	viper.AutomaticEnv()
+
+}
 
 func main() {
 
-	token, ok := os.LookupEnv("CLOUDFLARE_TOKEN")
-	if !ok {
-		log.Fatal("CLOUDFLARE_TOKEN env variable is not set")
-	}
-
-	zone, ok := os.LookupEnv("CLOUDFLARE_ZONE")
-	if !ok {
-		log.Fatal("CLOUDFLARE_ZONE env variable is not set")
-	}
-
-	subdomain, ok := os.LookupEnv("CLOUDFLARE_SUBDOMAIN")
-	if !ok {
-		log.Println("CLOUDFLARE_SUBDOMAIN is not set, using CLOUDFLARE_ZONE")
-	}
-
-	recordType, ok := os.LookupEnv("CLOUDFLARE_RECORD_TYPE")
-	if !ok {
-		recordType = "A"
-		log.Println("CLOUDFLARE_RECORD_TYPE is not set, using 'A'")
-	}
+	log.Printf("Zone: %s, subdomain: %s, record: %s", viper.Get("zone"), viper.Get("subdomain"), viper.Get("type"))
 
 	ip, err := publicip.GetCurrentIP()
 	if err != nil {
@@ -47,7 +49,7 @@ func main() {
 		log.Fatal("could not validat current public ip address", ip)
 	}
 
-	cf := cloudflare.NewClient(token)
+	cf := cloudflare.NewClient(viper.Get("token").(string))
 
 	var zoneId string
 	zones, err := cf.GetZones()
@@ -55,18 +57,18 @@ func main() {
 		log.Fatal("failed to get zones, ", err)
 	}
 	for _, z := range zones.Result {
-		if z.Name == zone {
+		if z.Name == viper.Get("zone").(string) {
 			zoneId = z.ID
 			break
 		}
 	}
 
-	recordName := zone
-	if subdomain != "" {
-		recordName = subdomain
+	recordName := viper.Get("zone").(string)
+	if viper.Get("subdomain") != "" {
+		recordName = viper.Get("subdomain").(string)
 	}
 
-	records, err := cf.GetDnsRecord(zoneId, recordType, recordName)
+	records, err := cf.GetDnsRecord(zoneId, viper.Get("type").(string), recordName)
 	if err != nil {
 		log.Fatal("failed to get dns records, ", err)
 	}

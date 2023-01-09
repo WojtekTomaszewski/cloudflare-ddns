@@ -2,6 +2,7 @@ package iptools
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -24,6 +25,11 @@ func GetCurrentIP() (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	if res.StatusCode >= 299 {
+		return "", fmt.Errorf("checking current ip failed with code %d", res.StatusCode)
+	}
+
 	return b.String(), nil
 }
 

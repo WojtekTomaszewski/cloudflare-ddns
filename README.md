@@ -1,28 +1,32 @@
-# cloudflare-ddns
+# cloudflare-ddns updates Cloudflare DNS address record to detected public ip value
 
-## Simple app to set DNS record to your public ip
+## Usage 
 
-### How to use 
+### Build
 
-Build
+(Optional) update of GOOS and GOARCH in Makefile
 
 ```bash
 make build
 ```
 
-Config is taken from env variables so make sure those are available:
+### Provide config
 
-```
-TOKEN is a valid Cloudflare access token  
-ZONE is name of Cloudflare zone to modify - usualy this is your top domain name  
-(optional) SUBDOMAIN - provide if you want to update subdomain record  
-TYPE - type of the record to update, most likely 'A'  
-```
-
-Run
+Provide `config.cfg` file in current dir or `$HOME/.config/cloudflare-ddns`
 
 ```bash
-TOKEN=123 ZONE=example.com TYPE=A ./cloudflare-ddns
+TOKEN="123"
+ZONE="exmaple.com"
+TYPE="A"
+SUBDOMAIN=""
+```
+
+You can override config options with env variables prefixed with `CLOUDFLARE_`
+
+### Run
+
+```bash
+bin/cloudflare-ddns
 ```
 
 

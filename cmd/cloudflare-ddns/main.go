@@ -2,10 +2,9 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/WojtekTomaszewski/cloudflare-ddns/internal/cloudflare"
-	publicip "github.com/WojtekTomaszewski/cloudflare-ddns/internal/public-ip"
+	"github.com/WojtekTomaszewski/cloudflare-ddns/internal/iptools"
 	"github.com/spf13/viper"
 )
 
@@ -17,11 +16,6 @@ import (
 // )
 
 func init() {
-
-	cwd, _ := os.Getwd()
-
-	log.Println("cwd: ", cwd)
-
 	viper.SetConfigName("config.cfg")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
@@ -38,14 +32,15 @@ func init() {
 
 func main() {
 
-	log.Printf("Zone: %s, subdomain: %s, record: %s", viper.Get("zone"), viper.Get("subdomain"), viper.Get("type"))
+	log.Printf("running config: zone: %s, subdomain: %s, record: %s", viper.Get("zone"), viper.Get("subdomain"), viper.Get("type"))
 
-	ip, err := publicip.GetCurrentIP()
+	ip, err := iptools.GetCurrentIP()
 	if err != nil {
 		log.Fatal("failed to get current ip address, ", err)
 	}
+	log.Println("detected ip: ", ip)
 
-	if !publicip.IsIpValid(ip) {
+	if !iptools.IsIpValid(ip) {
 		log.Fatal("could not validat current public ip address", ip)
 	}
 

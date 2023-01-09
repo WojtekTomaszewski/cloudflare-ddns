@@ -43,7 +43,7 @@ func (c *CFClient) GetZones() (*Zones, error) {
 	return zones, nil
 }
 
-// GetDnsRecord gets specific DNS record from the zone
+// GetDNSRecord gets specific DNS record from the zone
 // id is the zone id to retriev record from
 // t is record type
 // name is record name, usually domain/subdomain name for which you want to change record
@@ -60,7 +60,7 @@ func (c *CFClient) GetDNSRecord(id, t, name string) (*Records, error) {
 	return records, nil
 }
 
-// UpdateDnsRecord update specific record
+// UpdateDNSRecord update specific record
 // zoneId is zone id where record is defined
 // recordId is id of record to change
 // record is payload with changes to make

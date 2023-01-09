@@ -33,7 +33,7 @@ func GetCurrentIP() (string, error) {
 	return b.String(), nil
 }
 
-// IsIpValid does simple validation of IP address
+// IsIPValid does simple validation of IP address
 func IsIPValid(ip string) bool {
 	return net.ParseIP(ip) != nil
 }

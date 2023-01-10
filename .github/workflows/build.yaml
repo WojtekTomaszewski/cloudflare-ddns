@@ -53,3 +53,8 @@ jobs:
 
       - name: Build image
         run: docker build . -t ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ steps.short-sha.outputs.SHORT_SHA }}
+
+      - name: Push image
+        run: |
+          echo ${{ secrets.DOCKER_KEY }} | docker login --username wojciecht --pasword-stdin
+          docker push ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ steps.short-sha.outputs.SHORT_SHA }}

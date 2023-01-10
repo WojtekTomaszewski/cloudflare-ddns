@@ -44,9 +44,6 @@ jobs:
 
       - name: Run tests
         run: go test -race -vet=off ./...
-
-      - name: Checkout
-        uses: actions/checkout@v2
       
       - name: Set short commit sha
         id: short-sha
@@ -55,4 +52,4 @@ jobs:
           echo "SHORT_SHA=${short_sha}" >> $GITHUB_OUTPUT
 
       - name: Build image
-        run: docker build . -t ${env.REPOSITORY_NAME}/${env.IMAGE_NAME}:${github.ref_name}-${steps.short-sha.outputs.SHORT_SHA}
+        run: docker build . -t ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ steps.short-sha.outputs.SHORT_SHA }}

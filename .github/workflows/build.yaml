@@ -7,7 +7,7 @@ env:
 on: push
 
 jobs:
-  audit:
+  audit-and-build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -44,18 +44,15 @@ jobs:
 
       - name: Run tests
         run: go test -race -vet=off ./...
-  build-and-push:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
+
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Set short sha
+      - name: Set short commit sha
+        id: short-sha
         run: |
-          SHORT_SHA=${github.sha::7}
+          short_sha=$(git rev-parse --short ${{ github.sha }})
+          echo "SHORT_SHA=${short_sha}" >> $GITHUB_OUTPUT
 
       - name: Build image
-        run: docker build . -t ${env.REPOSITORY_NAME}/${env.IMAGE_NAME}:${github.ref_name}-${env.SHORT_SHA}
+        run: docker build . -t ${env.REPOSITORY_NAME}/${env.IMAGE_NAME}:${github.ref_name}-${steps.short-sha.outputs.SHORT_SHA}

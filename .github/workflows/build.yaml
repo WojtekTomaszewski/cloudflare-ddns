@@ -44,17 +44,13 @@ jobs:
 
       - name: Run tests
         run: go test -race -vet=off ./...
-      
-      - name: Set short commit sha
-        id: short-sha
-        run: |
-          short_sha=$(git rev-parse --short ${{ github.sha }})
-          echo "SHORT_SHA=${short_sha}" >> $GITHUB_OUTPUT
 
       - name: Build image
-        run: docker build . -t ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ steps.short-sha.outputs.SHORT_SHA }}
+        run: | 
+          docker build . -t ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.run_id }}
+          docker tag ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.run_id }} ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Push image
         run: |
           echo ${{ secrets.DOCKER_KEY }} | docker login --username wojciecht --password-stdin
-          docker push ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ steps.short-sha.outputs.SHORT_SHA }}
+          docker image push --all-tags ${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_NAME }}

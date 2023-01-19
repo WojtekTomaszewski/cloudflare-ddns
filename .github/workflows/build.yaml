@@ -35,6 +35,12 @@ jobs:
 
       - name: Run staticcheck
         run: staticcheck ./...
+        
+      - name: Install vulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+        
+      - name: Run vulncheck
+        run: govulncheck ./...
 
       - name: Install golint
         run: go install golang.org/x/lint/golint@latest

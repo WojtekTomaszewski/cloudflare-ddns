@@ -39,7 +39,7 @@ type PutRecord struct {
 	Errors  []Error `json:"errors,omitempty"`
 }
 
-// Errors represents errors object in 4xx responses
+// Error represents errors object in 4xx responses
 type Error struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`

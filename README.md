@@ -1,32 +1,32 @@
-# cloudflare-ddns updates Cloudflare DNS address record to detected public ip value
+# cloudflare-ddns updates Cloudflare DNS A record to specified or detected public ip
 
 ## Usage 
 
-### Build
-
-(Optional) update of GOOS and GOARCH in Makefile
+### Build binary or image
 
 ```bash
 make build
+
+or
+
+make build-image
 ```
 
-### Provide config
+### Usage
 
-Provide `config.cfg` file in current dir or `$HOME/.config/cloudflare-ddns`
+Set `CLOUDFLARE_TOKEN` environment variable with api key having access to the zone you want to modify
 
-```bash
-TOKEN="123"
-ZONE="exmaple.com"
-TYPE="A"
-SUBDOMAIN=""
-```
-
-You can override config options with env variables prefixed with `CLOUDFLARE_`
-
-### Run
+Then you can invoke:
 
 ```bash
-bin/cloudflare-ddns
+# Update zone example.com, domain example.com A record to ip x.x.x.x
+bin/cloudflare-ddns --zone example.com --ip x.x.x.x
+
+# Update zone exmaple.com, domain sub.exmaple.com A record to ip value detected with http://ifconfig.me
+bin/cloudflare-ddns --zone example.com --domain sub.example.com
+
+# Update zone example.com, domain exmaple.com A record to ip value detected with http://ifconfig.me but run in daemon mode and do update every 4h
+bin/cloudflare-ddns --zone example.com --daemon --interval 4
 ```
 
 

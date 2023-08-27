@@ -1,6 +1,6 @@
 module github.com/WojtekTomaszewski/cloudflare-ddns
 
-go 1.18
+go 1.21
 
 require github.com/spf13/viper v1.14.0
 

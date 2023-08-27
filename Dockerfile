@@ -1,7 +1,7 @@
-FROM golang:1.19-alpine as builder
+FROM golang:1.21-alpine as builder
 WORKDIR /builder
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o cloudflare-ddns cmd/cloudflare-ddns/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o cloudflare-ddns cmd/cloudflare-ddns/*.go
 
 FROM redhat/ubi8-minimal
 WORKDIR /opt/app

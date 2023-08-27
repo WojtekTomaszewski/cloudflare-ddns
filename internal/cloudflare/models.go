@@ -8,7 +8,9 @@ type Zone struct {
 
 // Zones is a list of Cloudflare zones
 type Zones struct {
-	Result []Zone `json:"result"`
+	Result  []Zone  `json:"result"`
+	Success bool    `json:"success"`
+	Errors  []Error `json:"errors,omitempty"`
 }
 
 // Record reprsents Cloudflare DNS record
@@ -23,7 +25,22 @@ type Record struct {
 	Proxied  bool   `json:"proxied,omitempty"`
 }
 
-// Records is a list of Cloudflare records
-type Records struct {
-	Result []Record `json:"result"`
+// ListRecords is response object for list DNS records call
+type ListRecords struct {
+	Result  []Record `json:"result"`
+	Success bool     `json:"success"`
+	Errors  []Error  `json:"errors,omitempty"`
+}
+
+// PutRecord is response object for update DNS record call
+type PutRecord struct {
+	Result  Record  `json:"result"`
+	Success bool    `json:"success"`
+	Errors  []Error `json:"errors,omitempty"`
+}
+
+// Errors represents errors object in 4xx responses
+type Error struct {
+	Code    int    `json:"code,omitempty"`
+	Message string `json:"message,omitempty"`
 }

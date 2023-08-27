@@ -4,7 +4,10 @@ env:
   REPOSITORY_NAME: wojciecht
   IMAGE_NAME: cloudflare-ddns
 
-on: push
+on: 
+  push:
+    branches:
+      - main
 
 jobs:
   audit-and-build:
